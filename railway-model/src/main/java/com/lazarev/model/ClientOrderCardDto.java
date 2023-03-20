@@ -1,4 +1,4 @@
-package com.lazarev.frontend.model;
+package com.lazarev.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ClientOrderCardDto {
     private Integer clientOrderId;
+    private Integer clientId;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate orderBegin;
@@ -26,5 +28,7 @@ public class ClientOrderCardDto {
     private String sourceStation;
     private String destStation;
     private Integer totalVolume;
-    private Integer clientId;
+    private Integer wagonAmount;
+    private Integer wagonVolume;
+    private BigDecimal rate;
 }

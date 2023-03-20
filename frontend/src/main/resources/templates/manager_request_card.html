@@ -14,6 +14,18 @@
     p {
         font-size: 20px;
     }
+
+    td input,textarea{
+        min-width: 10px;
+        max-width: 80%;
+        width: 80%;
+    }
+
+    textarea {
+        resize: none;
+        max-height: 70px;
+        height: 70px;
+    }
 </style>
 
 <nav class="fixed-top navbar navbar-light navbar-expand-lg bg-light me-1 ms-1 card">
@@ -28,7 +40,7 @@
                     <a class="nav-link" th:href="@{/logout}">Выйти</a>
                 </li>
             </ul>
-            <a class="navbar-text" href="#" th:text="${user.login}">
+            <a class="navbar-text" th:href="@{/railway-system/clients/{clientId}(clientId=${clientId})}" th:text="${user.login}">
                 Mike
             </a>
         </div>
@@ -41,13 +53,18 @@
         <div class="card-header">
             <h3 class="text-center">Заявка на связь с менеджером</h3>
         </div>
-        <form th:action="@{/railway-system/clients/{clientId}/manager-request(clientId=${clientId})}"
-              th:method="put" th:object="${request}">
+        <form th:action="@{/railway-system/clients/{clientId}/new-manager-request(clientId=${clientId})}"
+              th:method="post" th:object="${request}">
             <table class="table">
+                <col style="width:40%">
+                <col style="width:60%">
                 <tr>
                     <td>Номер заказа</td>
                     <td class="text-left">
-                        <input th:field="*{clientOrderId}">
+                        <select th:field="*{clientOrderId}">
+                            <option th:each="id : ${clientOrderIds}" th:value="${id}" th:text="${id}">
+                            </option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
@@ -59,13 +76,13 @@
                 <tr>
                     <td>Сообщение</td>
                     <td class="text-left">
-                        <textarea th:field="*{message}"/>
+                        <textarea class="col-xs-4" th:field="*{message}"/>
                     </td>
                 </tr>
                 <tr>
-                    <td>Желаемая дата звонка, гггг-ММ-дд чч-мм-сс</td>
+                    <td>Желаемые дата и время звонка</td>
                     <td class="text-left">
-                        <textarea th:field="*{dateTime}"/>
+                        <input type="datetime-local" th:field="*{dateTime}"/>
                     </td>
                 </tr>
                 <tr>

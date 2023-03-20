@@ -1,4 +1,4 @@
-package com.lazarev.frontend.model;
+package com.lazarev.model;
 
 public record UserDto(
         Integer id,

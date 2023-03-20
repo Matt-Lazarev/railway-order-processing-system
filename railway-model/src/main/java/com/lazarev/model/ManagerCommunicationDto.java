@@ -1,4 +1,4 @@
-package com.lazarev.frontend.model;
+package com.lazarev.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ManagerCommunicationDto {
+    private Integer id;
     private Integer clientId;
     private Integer clientOrderId;
     private String reason;
@@ -22,6 +23,8 @@ public class ManagerCommunicationDto {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime dateTime;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createAt;
+
+
 }

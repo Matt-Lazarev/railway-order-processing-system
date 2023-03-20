@@ -28,7 +28,7 @@
                     <a class="nav-link" th:href="@{/logout}">Выйти</a>
                 </li>
             </ul>
-            <a class="navbar-text" href="#" th:text="${user.login}">
+            <a class="navbar-text" th:href="@{/railway-system/clients/{clientId}(clientId=${clientId})}" th:text="${user.login}">
                 Mike
             </a>
         </div>

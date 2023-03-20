@@ -10,6 +10,8 @@
     <modules>
         <module>api-gateway</module>
         <module>frontend</module>
+        <module>personal-account-service</module>
+        <module>railway-model</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -28,6 +30,13 @@
         <jib.maven.plugin.version>3.2.1</jib.maven.plugin.version>
         <eclipse.temurin.image.version>17.0.4.1_1-jre</eclipse.temurin.image.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -65,6 +74,12 @@
                 <artifactId>keycloak-admin-client</artifactId>
                 <version>${keycloak.admin.client.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.lazarev</groupId>
+                <artifactId>railway-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -74,6 +89,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.maven.plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

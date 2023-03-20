@@ -31,7 +31,7 @@
                     <a class="nav-link" th:href="@{/logout}">Выйти</a>
                 </li>
             </ul>
-            <a class="navbar-text" href="#" th:text="${user.login}">
+            <a class="navbar-text" th:href="@{/railway-system/clients/{clientId}(clientId=${clientId})}" th:text="${user.login}">
                 Mike
             </a>
         </div>
@@ -47,7 +47,7 @@
                     <a th:href="@{/railway-system/clients/{clientId}/orders(clientId=${clientId})}" class="list-group-item list-group-item-action">Мои перевозки</a>
                     <a th:href="@{/railway-system/clients/{clientId}/new-order(clientId=${clientId})}" class="list-group-item list-group-item-action">Оформить заявку на перевозку</a>
                     <a href="#" class="list-group-item list-group-item-action">Мои документы</a>
-                    <a href="#" class="list-group-item list-group-item-action">Связаться с менеджером</a>
+                    <a th:href="@{/railway-system/clients/{clientId}/manager-requests(clientId=${clientId})}" class="list-group-item list-group-item-action">Связаться с менеджером</a>
                     <a th:href="@{/railway-system/clients/{clientId}(clientId=${clientId})}" class="list-group-item list-group-item-action">Найстроки профиля</a>
                 </div>
             </div>

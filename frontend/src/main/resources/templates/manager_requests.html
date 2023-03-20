@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои перевозки</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<style>
+    body {
+        margin: 70px 5px 5px;
+    }
+    p {
+        font-size: 20px;
+    }
+    a {
+        color: black
+    }
+</style>
+
+<nav class="fixed-top navbar navbar-light navbar-expand-lg bg-light me-1 ms-1 card">
+    <div class="container-fluid">
+        <span class="navbar-brand">Личный кабинет</span>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/railway-system/home}">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">Выйти</a>
+                </li>
+            </ul>
+            <a class="navbar-text" th:href="@{/railway-system/clients/{clientId}(clientId=${clientId})}" th:text="${user.login}">
+                Mike
+            </a>
+        </div>
+    </div>
+</nav>
+
+<body>
+    <div class="container mt-5 w-75 p-3" >
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Мой менеджер</h3>
+            </div>
+            <table class="table">
+                <tr>
+                    <td>Имя</td>
+                    <td class="text-left" th:text="${manager.firstname}"></td>
+                </tr>
+                <tr>
+                    <td>Фамилия</td>
+                    <td class="text-left" th:text="${manager.lastname}"></td>
+                </tr>
+                <tr>
+                    <td>Телефон</td>
+                    <td class="text-left" th:text="${manager.phone}"></td>
+                </tr>
+                <tr>
+                    <td>Электронная почта</td>
+                    <td class="text-left" th:text="${manager.email}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3 class="text-center">Мои заявки</h3>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col" class="text-center">Номер</th>
+                <th scope="col" class="text-center">Номер заказа</th>
+                <th scope="col" class="text-center">Причина</th>
+                <th scope="col" class="text-center">Статус</th>
+                <th scope="col" class="text-center">Сообщение</th>
+                <th scope="col" class="text-center">Дата и время обращения</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="managerCommunication: ${managerCommunications}">
+                <td class="text-center" th:text="${managerCommunication.id}" />
+                <td class="text-center" th:text="${managerCommunication.clientOrderId}" />
+                <td class="text-center" th:text="${managerCommunication.reason}" />
+                <td class="text-center" th:text="${managerCommunication.status}" />
+                <td class="text-center" th:text="${managerCommunication.message}" />
+                <td class="text-center" th:text="${#temporals.format(managerCommunication.createAt, 'yyyy-MM-dd HH:mm')}" />
+            </tr>
+            <tr>
+                <td>
+                    <a th:href="@{/railway-system/clients/{clientId}/new-manager-request(clientId=${clientId})}">
+                        <button type="submit" class="btn btn-secondary">Создать новую заявку</button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+<footer class="fixed-bottom bg-light text-center text-lg-start card mt-5 me-1 ms-1">
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                <h5 class="text-uppercase small">Описание</h5>
+                <p class="small">Система контроля железнодорожных перевозок</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase small">Ссылки</h5>
+                <ul class="list-unstyled mb-0">
+                    <li><a href="#" class="text-dark small">https://github.com/Matt-Lazarev</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase small">Контакты</h5>
+                <ul class="list-unstyled mb-0">
+                    <li><i class="fas fa-envelope small"></i>matv26-01@mail.ru</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        ©2023 Lazarev
+    </div>
+</footer>
+</html>

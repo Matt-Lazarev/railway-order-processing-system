@@ -28,7 +28,7 @@
                     <a class="nav-link" th:href="@{/logout}">Выйти</a>
                 </li>
             </ul>
-            <a class="navbar-text" href="#" th:text="${user.login}">
+            <a class="navbar-text" th:href="@{/railway-system/clients/{clientId}(clientId=${clientId})}" th:text="${user.login}">
                 Mike
             </a>
         </div>
@@ -67,12 +67,36 @@
                 <td class="text-left" th:text="${card.totalVolume}"></td>
             </tr>
             <tr>
-                <td>Дата начала перевозки</td>
+                <td>Объем вагона</td>
+                <th:block th:switch="${card.wagonVolume}">
+                    <td class="text-left" th:case='null'>Рассчитывается</td>
+                    <td class="text-left" th:case='*' th:text="${card.wagonVolume}"></td>
+                </th:block>
+            </tr>
+            <tr>
+                <td>Количество вагонов</td>
+                <th:block th:switch="${card.wagonAmount}">
+                    <td class="text-left" th:case='null'>Рассчитывается</td>
+                    <td class="text-left" th:case='*' th:text="${card.wagonAmount}"></td>
+                </th:block>
+            </tr>
+            <tr>
+                <td>Ставка (стоимость перевозки)</td>
+                <th:block th:switch="${card.rate}">
+                    <td class="text-left" th:case='null'>Рассчитывается</td>
+                    <td class="text-left" th:case='*' th:text="${card.rate}"></td>
+                </th:block>
+            </tr>
+            <tr>
+                <td>Плановая дата начала перевозки</td>
                 <td class="text-left" th:text="${card.orderBegin}"></td>
             </tr>
             <tr>
                 <td>Плановая дата окончания перевозки</td>
-                <td class="text-left" th:text="${card.orderEnd}"></td>
+                <th:block th:switch="${card.orderEnd}">
+                    <td class="text-left" th:case='null'>Рассчитывается</td>
+                    <td class="text-left" th:case='*' th:text="${card.orderEnd}"></td>
+                </th:block>
             </tr>
         </table>
     </div>

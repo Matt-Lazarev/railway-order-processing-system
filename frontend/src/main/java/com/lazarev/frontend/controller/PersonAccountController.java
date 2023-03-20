@@ -1,7 +1,7 @@
 package com.lazarev.frontend.controller;
 
-import com.lazarev.frontend.model.*;
 import com.lazarev.frontend.service.FrontendService;
+import com.lazarev.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/railway-system")
 public class PersonAccountController {
-    private static final UserDto MOCK_USER = new UserDto(1, "Mike", "123", "ROLE_USER");
+    private static final UserDto MOCK_USER = new UserDto(1, "mike", "123", "ROLE_USER");
     private final FrontendService frontendService;
 
     @GetMapping("/home")
@@ -66,18 +66,28 @@ public class PersonAccountController {
         return "redirect:/railway-system/clients/%d/orders".formatted(clientId);
     }
 
-    @GetMapping("/railway-system/clients/{clientId}/manager-request")
-    public String getNewManagerRequestPage(@PathVariable Integer clientId,
-                                           Model model){
+    @GetMapping("/clients/{clientId}/manager-requests")
+    public String getManagerRequestsPage(@PathVariable Integer clientId, Model model){
+        ManagerDto manager = frontendService.getManagerByClientId(clientId);
+        List<ManagerCommunicationDto> managerCommunications = frontendService.getManagerCommunicationsByClientId(clientId);
+        model.addAttribute("manager", manager);
+        model.addAttribute("managerCommunications", managerCommunications);
+        return "manager_requests";
+    }
+
+    @GetMapping("clients/{clientId}/new-manager-request")
+    public String getNewManagerRequestPage(@PathVariable Integer clientId, Model model){
+        List<Integer> ids = frontendService.getClientOrderIdsByClientId(clientId);
         model.addAttribute("request", new ManagerCommunicationDto());
+        model.addAttribute("clientOrderIds", ids);
         return "manager_request_card";
     }
 
-    @GetMapping("/railway-system/clients/{clientId}/manager-request")
+    @PostMapping("clients/{clientId}/new-manager-request")
     public String getNewManagerRequestPage(@PathVariable Integer clientId,
-                                           @ModelAttribute ManagerCommunicationDto request){
-
-        return "redirect:/railway-system/clients/%d/manager-request".formatted(clientId);
+                                           @ModelAttribute ManagerCommunicationDto managerCommunication){
+        frontendService.saveNewManagerCommunication(clientId, managerCommunication);
+        return "redirect:/railway-system/clients/%d/manager-requests".formatted(clientId);
     }
 
     @ModelAttribute
