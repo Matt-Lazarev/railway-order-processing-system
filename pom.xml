@@ -12,6 +12,8 @@
         <module>frontend</module>
         <module>personal-account-service</module>
         <module>railway-model</module>
+        <module>analytics-service</module>
+        <module>monitoring-service</module>
     </modules>
 
     <packaging>pom</packaging>

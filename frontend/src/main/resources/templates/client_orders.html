@@ -61,7 +61,11 @@
                 <td class="text-center" th:text="${clientOrder.sourceStation}" />
                 <td class="text-center" th:text="${clientOrder.destStation}" />
                 <td><a th:href="@{/railway-system/clients/{clientId}/orders/{orderId}(clientId=${clientId}, orderId=${clientOrder.id})}"/> Показать</td>
-                <td><a href="#"/> Показать</td>
+                <th:block th:switch="${clientOrder.status}">
+                    <td th:case="'В пути'"><a th:href="@{http://localhost:8082/railway-system/map?clientOrderId={clientOrderId}(clientOrderId=${clientOrder.id})}"/> Показать</td>
+                    <td th:case="'Завершен'">Перевозка завершена</td>
+                    <td th:case="*">Перевозка еще не начата</td>
+                </th:block>
             </tr>
             </tbody>
         </table>

@@ -1,25 +1,23 @@
 package com.lazarev.frontend.service;
 
 
+import com.lazarev.frontend.httpclient.AnalyticsClient;
 import com.lazarev.frontend.httpclient.PersonalAccountClient;
+import com.lazarev.frontend.mapper.DtoMapper;
 import com.lazarev.model.*;
+import com.lazarev.model.analytics.FlightParametersCalcRequest;
+import com.lazarev.model.analytics.FlightParametersCalcResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class FrontendService {
-    private static final List<ManagerCommunicationDto> MOCK_COMMUNICATIONS = new ArrayList<>(List.of(
-            new ManagerCommunicationDto(1, 1, 1, "Уточнение по заказу", "Необходимо уточнить параметры перевозки", "Исполнено",
-                    LocalDateTime.of(2023, 3, 10, 10, 30),
-                    LocalDateTime.of(2023, 3, 9, 16, 30))
-    ));
-
     private final PersonalAccountClient personalAccountClient;
+    private final AnalyticsClient analyticsClient;
+    private final DtoMapper dtoMapper;
 
     public ClientDto getClientByUsername(String username) {
         return personalAccountClient.getClientByUsername(username);
@@ -46,7 +44,18 @@ public class FrontendService {
     }
 
     public void saveNewClientOrder(Integer clientId, ClientOrderCardDto clientOrder) {
-        personalAccountClient.saveNewClientOrder(clientId, clientOrder);
+        Integer clientOrderId = personalAccountClient.saveNewClientOrder(clientId, clientOrder);
+        clientOrder.setClientOrderId(clientOrderId);
+
+        FlightParametersCalcRequest request = dtoMapper.toFlightParametersCalcRequest(clientOrder);
+        FlightParametersCalcResponse response = analyticsClient.calculateFlightParameters(request);
+
+        clientOrder.setOrderEnd(response.orderEnd());
+        clientOrder.setWagonAmount(response.wagonAmount());
+        clientOrder.setWagonVolume(response.wagonVolume());
+        clientOrder.setRate(response.rate());
+
+        personalAccountClient.updateClientOrderById(clientId, clientOrderId, response);
     }
 
     public ManagerDto getManagerByClientId(Integer clientId){
@@ -59,8 +68,5 @@ public class FrontendService {
 
     public void saveNewManagerCommunication(Integer clientId, ManagerCommunicationDto managerCommunication) {
         personalAccountClient.saveNewManagerCommunication(clientId, managerCommunication);
-        managerCommunication.setCreateAt(LocalDateTime.now());
-        managerCommunication.setStatus("Новый");
-        MOCK_COMMUNICATIONS.add(managerCommunication);
     }
 }

@@ -5,6 +5,7 @@ import com.lazarev.model.ClientOrderCardDto;
 import com.lazarev.model.ClientOrderDto;
 import com.lazarev.model.ManagerCommunicationDto;
 import com.lazarev.model.ManagerDto;
+import com.lazarev.model.analytics.FlightParametersCalcResponse;
 import com.lazarev.personalaccountservice.entity.Cargo;
 import com.lazarev.personalaccountservice.entity.Client;
 import com.lazarev.personalaccountservice.entity.ClientOrder;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-03-20T14:33:33+0300",
+    date = "2023-03-21T16:30:20+0300",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3.1 (Oracle Corporation)"
 )
 @Component
@@ -118,6 +119,7 @@ public class ClientMapperImpl implements ClientMapper {
         ClientOrder clientOrder = new ClientOrder();
 
         clientOrder.setBeginDate( clientOrderCardDto.getOrderBegin() );
+        clientOrder.setEndDate( clientOrderCardDto.getOrderEnd() );
         clientOrder.setId( clientOrderCardDto.getClientOrderId() );
         clientOrder.setStatus( clientOrderCardDto.getStatus() );
         clientOrder.setWagonAmount( clientOrderCardDto.getWagonAmount() );
@@ -154,6 +156,7 @@ public class ClientMapperImpl implements ClientMapper {
         clientOrderCardDto.setDestStation( clientOrderDestStationName( clientOrder ) );
         clientOrderCardDto.setCargo( clientOrderCargoName( clientOrder ) );
         clientOrderCardDto.setOrderBegin( clientOrder.getBeginDate() );
+        clientOrderCardDto.setOrderEnd( clientOrder.getEndDate() );
         clientOrderCardDto.setClientOrderId( clientOrder.getId() );
         clientOrderCardDto.setStatus( clientOrder.getStatus() );
         clientOrderCardDto.setTotalVolume( clientOrder.getTotalVolume() );
@@ -238,6 +241,18 @@ public class ClientMapperImpl implements ClientMapper {
         }
 
         return list;
+    }
+
+    @Override
+    public void updateClientOrder(ClientOrder clientOrder, FlightParametersCalcResponse response) {
+        if ( response == null ) {
+            return;
+        }
+
+        clientOrder.setEndDate( response.orderEnd() );
+        clientOrder.setWagonAmount( response.wagonAmount() );
+        clientOrder.setWagonVolume( response.wagonVolume() );
+        clientOrder.setRate( response.rate() );
     }
 
     private String clientOrderSourceStationName(ClientOrder clientOrder) {

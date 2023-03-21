@@ -1,6 +1,7 @@
 package com.lazarev.personalaccountservice.mapper;
 
 import com.lazarev.model.*;
+import com.lazarev.model.analytics.FlightParametersCalcResponse;
 import com.lazarev.personalaccountservice.entity.Client;
 import com.lazarev.personalaccountservice.entity.ClientOrder;
 import com.lazarev.personalaccountservice.entity.Manager;
@@ -33,6 +34,7 @@ public interface ClientMapper {
     @Mapping(target = "destStation", ignore = true)
     @Mapping(target = "cargo", ignore = true)
     @Mapping(target = "beginDate", source = "orderBegin")
+    @Mapping(target = "endDate", source = "orderEnd")
     @Mapping(target = "id", source = "clientOrderId")
     ClientOrder toClientOrder(ClientOrderCardDto clientOrderCardDto);
 
@@ -42,6 +44,7 @@ public interface ClientMapper {
     @Mapping(target = "destStation" , source = "clientOrder.destStation.name")
     @Mapping(target = "cargo" , source = "clientOrder.cargo.name")
     @Mapping(target = "orderBegin", source = "beginDate")
+    @Mapping(target = "orderEnd", source = "endDate")
     @Mapping(target = "clientOrderId", source = "id")
     ClientOrderCardDto toClientOrderCardDto(ClientOrder clientOrder);
 
@@ -54,4 +57,7 @@ public interface ClientMapper {
     ManagerCommunication toManagerCommunication(ManagerCommunicationDto managerCommunicationDto);
 
     List<ManagerCommunicationDto> toManagerCommunicationDtoList(List<ManagerCommunication> managerCommunications);
+
+    @Mapping(target = "endDate", source = "orderEnd")
+    void updateClientOrder(@MappingTarget ClientOrder clientOrder, FlightParametersCalcResponse response);
 }

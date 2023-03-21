@@ -2,6 +2,7 @@ package com.lazarev.personalaccountservice.service;
 
 
 import com.lazarev.model.*;
+import com.lazarev.model.analytics.FlightParametersCalcResponse;
 import com.lazarev.personalaccountservice.entity.Client;
 import com.lazarev.personalaccountservice.entity.ClientOrder;
 import com.lazarev.personalaccountservice.entity.Manager;
@@ -69,11 +70,17 @@ public class ClientService {
     }
 
     @Transactional
-    public void saveClientOrder(Integer clientId, ClientOrderCardDto clientOrderCardDto){
+    public Integer saveClientOrder(Integer clientId, ClientOrderCardDto clientOrderCardDto){
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(()->new NoSuchClientException("Client with id='%d' not found".formatted(clientId)));
         ClientOrder clientOrder = clientMapper.toClientOrder(clientOrderCardDto);
-        clientOrderService.saveClientOrder(client, clientOrder, clientOrderCardDto);
+        Integer clientOrderId = clientOrderService.saveClientOrder(client, clientOrder, clientOrderCardDto);
+        return clientOrderId;
+    }
+
+    @Transactional
+    public void updateClientOrderById(Integer clientOrderId, FlightParametersCalcResponse response) {
+        clientOrderService.updateClientOrderById(clientOrderId, response);
     }
 
     @Transactional(readOnly = true)

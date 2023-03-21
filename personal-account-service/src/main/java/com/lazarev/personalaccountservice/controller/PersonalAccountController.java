@@ -1,6 +1,7 @@
 package com.lazarev.personalaccountservice.controller;
 
 import com.lazarev.model.*;
+import com.lazarev.model.analytics.FlightParametersCalcResponse;
 import com.lazarev.personalaccountservice.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,7 @@ public class PersonalAccountController {
     }
 
     @GetMapping("/{clientId}/orders/ids")
+    @CrossOrigin("*")
     public List<Integer> getClientOrderIdsByClientId(@PathVariable Integer clientId){
         return clientService.getClientOrderIdsByClientId(clientId);
     }
@@ -51,9 +53,16 @@ public class PersonalAccountController {
     }
 
     @PostMapping("/{clientId}/orders")
-    public void saveNewClientOrder(@PathVariable Integer clientId,
+    public Integer saveNewClientOrder(@PathVariable Integer clientId,
                             @RequestBody ClientOrderCardDto clientOrder){
-        clientService.saveClientOrder(clientId, clientOrder);
+        return clientService.saveClientOrder(clientId, clientOrder);
+    }
+
+    @PutMapping("/{clientId}/orders/{clientOrderId}")
+    public void updateClientOrderById(@PathVariable Integer clientId,
+                               @PathVariable Integer clientOrderId,
+                               @RequestBody FlightParametersCalcResponse response){
+        clientService.updateClientOrderById(clientOrderId, response);
     }
 
     @GetMapping("/{clientId}/manager")
@@ -71,6 +80,4 @@ public class PersonalAccountController {
                                             @RequestBody ManagerCommunicationDto managerCommunication){
         clientService.saveManagerCommunication(clientId, managerCommunication);
     }
-
-
 }

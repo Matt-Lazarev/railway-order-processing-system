@@ -2,13 +2,14 @@ package com.lazarev.frontend.httpclient;
 
 
 import com.lazarev.model.*;
+import com.lazarev.model.analytics.FlightParametersCalcResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(
-        name = "personal-account-client", url = "http://localhost:8080/api/clients")
+@FeignClient(name = "personal-account-client",
+             url = "http://localhost:8080/api/clients")
 public interface PersonalAccountClient {
 
     @GetMapping
@@ -34,9 +35,13 @@ public interface PersonalAccountClient {
                                                           @PathVariable Integer orderId);
 
     @PostMapping("/{clientId}/orders")
-    void saveNewClientOrder(@PathVariable Integer clientId,
+    Integer saveNewClientOrder(@PathVariable Integer clientId,
                             @RequestBody ClientOrderCardDto clientOrder);
 
+    @PutMapping("/{clientId}/orders/{clientOrderId}")
+    void updateClientOrderById(@PathVariable Integer clientId,
+                               @PathVariable Integer clientOrderId,
+                               @RequestBody FlightParametersCalcResponse response);
     @GetMapping("/{clientId}/manager")
     ManagerDto getManagerByClientId(@PathVariable Integer clientId);
 
