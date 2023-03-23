@@ -2,10 +2,9 @@ package com.lazarev.personalaccountservice.mapper;
 
 import com.lazarev.model.*;
 import com.lazarev.model.analytics.FlightParametersCalcResponse;
-import com.lazarev.personalaccountservice.entity.Client;
-import com.lazarev.personalaccountservice.entity.ClientOrder;
-import com.lazarev.personalaccountservice.entity.Manager;
-import com.lazarev.personalaccountservice.entity.ManagerCommunication;
+import com.lazarev.model.documents.DocumentDto;
+import com.lazarev.personalaccountservice.entity.*;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -46,7 +45,16 @@ public interface ClientMapper {
     @Mapping(target = "orderBegin", source = "beginDate")
     @Mapping(target = "orderEnd", source = "endDate")
     @Mapping(target = "clientOrderId", source = "id")
+    @Mapping(target = "clientFullName", ignore = true)
     ClientOrderCardDto toClientOrderCardDto(ClientOrder clientOrder);
+
+    @BeforeMapping
+    default void initClientOrderCardDto(@MappingTarget ClientOrderCardDto dto, ClientOrder clientOrder){
+        Client client = clientOrder.getClient();
+        if(client != null){
+            dto.setClientFullName(client.getLastname() + " " + client.getFirstname());
+        }
+    }
 
     ManagerDto toManagerDto(Manager manager);
 
@@ -60,4 +68,10 @@ public interface ClientMapper {
 
     @Mapping(target = "endDate", source = "orderEnd")
     void updateClientOrder(@MappingTarget ClientOrder clientOrder, FlightParametersCalcResponse response);
+
+    @Mapping(target = "clientOrderId", source = "document.clientOrder.id")
+    DocumentDto toDocumentDto(Document document);
+    List<DocumentDto> toDocumentDtoList(List<Document> documents);
+
+
 }

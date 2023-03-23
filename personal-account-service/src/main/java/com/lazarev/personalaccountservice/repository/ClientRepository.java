@@ -1,6 +1,7 @@
 package com.lazarev.personalaccountservice.repository;
 
 import com.lazarev.model.ClientOrderDto;
+import com.lazarev.model.documents.DocumentDto;
 import com.lazarev.personalaccountservice.entity.Client;
 import com.lazarev.personalaccountservice.entity.Manager;
 import com.lazarev.personalaccountservice.entity.ManagerCommunication;
@@ -36,5 +37,4 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
               where c.id = :clientId
            """)
     Optional<Manager> findManagerByClientId(Integer clientId);
-
 }

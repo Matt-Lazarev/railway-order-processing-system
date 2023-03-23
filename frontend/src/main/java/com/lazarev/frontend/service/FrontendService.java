@@ -2,12 +2,15 @@ package com.lazarev.frontend.service;
 
 
 import com.lazarev.frontend.httpclient.AnalyticsClient;
+import com.lazarev.frontend.httpclient.DocumentsClient;
 import com.lazarev.frontend.httpclient.PersonalAccountClient;
 import com.lazarev.frontend.mapper.DtoMapper;
 import com.lazarev.model.*;
 import com.lazarev.model.analytics.FlightParametersCalcRequest;
 import com.lazarev.model.analytics.FlightParametersCalcResponse;
+import com.lazarev.model.documents.DocumentDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.List;
 public class FrontendService {
     private final PersonalAccountClient personalAccountClient;
     private final AnalyticsClient analyticsClient;
+    private final DocumentsClient documentsClient;
     private final DtoMapper dtoMapper;
 
     public ClientDto getClientByUsername(String username) {
@@ -68,5 +72,14 @@ public class FrontendService {
 
     public void saveNewManagerCommunication(Integer clientId, ManagerCommunicationDto managerCommunication) {
         personalAccountClient.saveNewManagerCommunication(clientId, managerCommunication);
+    }
+
+    public List<DocumentDto> getAllClientDocuments(Integer clientId){
+        return personalAccountClient.getAllClientDocuments(clientId);
+    }
+
+    public ResponseEntity<byte[]> downloadDocument(Integer clientId, Integer documentId) {
+        DocumentDto document = personalAccountClient.getDocumentByDocumentId(clientId, documentId);
+        return documentsClient.downloadDocument(document.clientOrder());
     }
 }

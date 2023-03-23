@@ -2,6 +2,7 @@ package com.lazarev.personalaccountservice.controller;
 
 import com.lazarev.model.*;
 import com.lazarev.model.analytics.FlightParametersCalcResponse;
+import com.lazarev.model.documents.DocumentDto;
 import com.lazarev.personalaccountservice.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -79,5 +80,16 @@ public class PersonalAccountController {
     public void saveNewManagerCommunication(@PathVariable Integer clientId,
                                             @RequestBody ManagerCommunicationDto managerCommunication){
         clientService.saveManagerCommunication(clientId, managerCommunication);
+    }
+
+    @GetMapping("/{clientId}/documents")
+    public List<DocumentDto> getAllClientDocuments(@PathVariable Integer clientId){
+        return clientService.getAllDocumentsByClientId(clientId);
+    }
+
+    @GetMapping("/{clientId}/documents/{documentId}")
+    public DocumentDto downloadDocument(@PathVariable Integer clientId,
+                                        @PathVariable Integer documentId){
+        return clientService.getDocumentById(documentId);
     }
 }

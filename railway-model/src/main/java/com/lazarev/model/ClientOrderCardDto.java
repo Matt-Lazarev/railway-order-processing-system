@@ -16,6 +16,7 @@ import java.time.LocalDate;
 public class ClientOrderCardDto {
     private Integer clientOrderId;
     private Integer clientId;
+    private String clientFullName;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate orderBegin;

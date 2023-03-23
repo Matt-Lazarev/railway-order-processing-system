@@ -6,3 +6,6 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+
+  application:
+    name: frontend

@@ -14,7 +14,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             NoSuchClientException.class, NoSuchClientOrderException.class,
-            NoSuchCargoException.class, NoSuchStationException.class})
+            NoSuchCargoException.class, NoSuchStationException.class,
+            NoSuchDocumentException.class})
     public ResponseEntity<ErrorResponse> handleNoSuchClientException(RuntimeException ex){
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),

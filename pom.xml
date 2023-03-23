@@ -14,6 +14,8 @@
         <module>railway-model</module>
         <module>analytics-service</module>
         <module>monitoring-service</module>
+        <module>documents-service</module>
+        <module>discovery-server</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -31,6 +33,9 @@
         <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
         <jib.maven.plugin.version>3.2.1</jib.maven.plugin.version>
         <eclipse.temurin.image.version>17.0.4.1_1-jre</eclipse.temurin.image.version>
+        <org.apache.poi.version>5.2.3</org.apache.poi.version>
+        <commons.io.version>2.11.0</commons.io.version>
+        <commons.compress.version>1.22</commons.compress.version>
     </properties>
 
     <dependencies>
@@ -81,7 +86,26 @@
                 <artifactId>railway-model</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${org.apache.poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${org.apache.poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons.compress.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

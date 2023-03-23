@@ -6,20 +6,23 @@ import com.lazarev.model.ClientOrderDto;
 import com.lazarev.model.ManagerCommunicationDto;
 import com.lazarev.model.ManagerDto;
 import com.lazarev.model.analytics.FlightParametersCalcResponse;
+import com.lazarev.model.documents.DocumentDto;
 import com.lazarev.personalaccountservice.entity.Cargo;
 import com.lazarev.personalaccountservice.entity.Client;
 import com.lazarev.personalaccountservice.entity.ClientOrder;
+import com.lazarev.personalaccountservice.entity.Document;
 import com.lazarev.personalaccountservice.entity.Manager;
 import com.lazarev.personalaccountservice.entity.ManagerCommunication;
 import com.lazarev.personalaccountservice.entity.Station;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-03-21T16:30:20+0300",
+    date = "2023-03-23T15:13:17+0300",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3.1 (Oracle Corporation)"
 )
 @Component
@@ -152,6 +155,8 @@ public class ClientMapperImpl implements ClientMapper {
 
         ClientOrderCardDto clientOrderCardDto = new ClientOrderCardDto();
 
+        initClientOrderCardDto( clientOrderCardDto, clientOrder );
+
         clientOrderCardDto.setSourceStation( clientOrderSourceStationName( clientOrder ) );
         clientOrderCardDto.setDestStation( clientOrderDestStationName( clientOrder ) );
         clientOrderCardDto.setCargo( clientOrderCargoName( clientOrder ) );
@@ -255,6 +260,48 @@ public class ClientMapperImpl implements ClientMapper {
         clientOrder.setRate( response.rate() );
     }
 
+    @Override
+    public DocumentDto toDocumentDto(Document document) {
+        if ( document == null ) {
+            return null;
+        }
+
+        Integer clientOrderId = null;
+        Integer id = null;
+        String type = null;
+        byte[] data = null;
+        ClientOrderCardDto clientOrder = null;
+
+        clientOrderId = documentClientOrderId( document );
+        id = document.getId();
+        type = document.getType();
+        byte[] data1 = document.getData();
+        if ( data1 != null ) {
+            data = Arrays.copyOf( data1, data1.length );
+        }
+        clientOrder = toClientOrderCardDto( document.getClientOrder() );
+
+        Integer clientId = null;
+
+        DocumentDto documentDto = new DocumentDto( id, clientId, clientOrderId, type, data, clientOrder );
+
+        return documentDto;
+    }
+
+    @Override
+    public List<DocumentDto> toDocumentDtoList(List<Document> documents) {
+        if ( documents == null ) {
+            return null;
+        }
+
+        List<DocumentDto> list = new ArrayList<DocumentDto>( documents.size() );
+        for ( Document document : documents ) {
+            list.add( toDocumentDto( document ) );
+        }
+
+        return list;
+    }
+
     private String clientOrderSourceStationName(ClientOrder clientOrder) {
         if ( clientOrder == null ) {
             return null;
@@ -320,6 +367,21 @@ public class ClientMapperImpl implements ClientMapper {
             return null;
         }
         ClientOrder clientOrder = managerCommunication.getClientOrder();
+        if ( clientOrder == null ) {
+            return null;
+        }
+        Integer id = clientOrder.getId();
+        if ( id == null ) {
+            return null;
+        }
+        return id;
+    }
+
+    private Integer documentClientOrderId(Document document) {
+        if ( document == null ) {
+            return null;
+        }
+        ClientOrder clientOrder = document.getClientOrder();
         if ( clientOrder == null ) {
             return null;
         }

@@ -6,6 +6,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -50,4 +52,17 @@ public class ClientOrder {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "dest_station_id", referencedColumnName = "id")
     private Station destStation;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientOrder", orphanRemoval = true)
+    private List<Document> documents = new ArrayList<>();
+
+    public void setDocuments(List<Document> documents){
+        documents.forEach(document -> document.setClientOrder(this));
+        this.documents = documents;
+    }
+
+    public void addDocument(Document document){
+        document.setClientOrder(this);
+        this.documents.add(document);
+    }
 }

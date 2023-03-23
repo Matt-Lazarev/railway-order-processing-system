@@ -3,6 +3,7 @@ package com.lazarev.personalaccountservice.service;
 
 import com.lazarev.model.*;
 import com.lazarev.model.analytics.FlightParametersCalcResponse;
+import com.lazarev.model.documents.DocumentDto;
 import com.lazarev.personalaccountservice.entity.Client;
 import com.lazarev.personalaccountservice.entity.ClientOrder;
 import com.lazarev.personalaccountservice.entity.Manager;
@@ -11,10 +12,10 @@ import com.lazarev.personalaccountservice.exception.NoSuchClientException;
 import com.lazarev.personalaccountservice.mapper.ClientMapper;
 import com.lazarev.personalaccountservice.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,6 +25,7 @@ public class ClientService {
     private final ClientMapper clientMapper;
     private final ClientOrderService clientOrderService;
     private final ManagerCommunicationService managerCommunicationService;
+    private final DocumentService documentService;
 
     @Transactional(readOnly = true)
     public List<ClientDto> getAllClients(){
@@ -104,5 +106,15 @@ public class ClientService {
         ManagerCommunication managerCommunication = clientMapper.toManagerCommunication(managerCommunicationDto);
 
         managerCommunicationService.saveManagerCommunication(managerCommunication, client, clientOrder);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DocumentDto> getAllDocumentsByClientId(Integer clientId) {
+        return documentService.getAllDocumentsByClientId(clientId);
+    }
+
+    @Transactional(readOnly = true)
+    public DocumentDto getDocumentById(Integer documentId) {
+        return documentService.getDocumentByDocumentId(documentId);
     }
 }

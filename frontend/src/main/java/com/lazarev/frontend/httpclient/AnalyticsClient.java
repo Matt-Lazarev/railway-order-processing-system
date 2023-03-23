@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "analytics-client",
-        url = "http://localhost:8081/api/calculator")
+             url = "http://localhost:8081/api/calculator")
 public interface AnalyticsClient {
 
     @PostMapping

@@ -2,7 +2,9 @@ package com.lazarev.frontend.controller;
 
 import com.lazarev.frontend.service.FrontendService;
 import com.lazarev.model.*;
+import com.lazarev.model.documents.DocumentDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -75,7 +77,7 @@ public class PersonAccountController {
         return "manager_requests";
     }
 
-    @GetMapping("clients/{clientId}/new-manager-request")
+    @GetMapping("/clients/{clientId}/new-manager-request")
     public String getNewManagerRequestPage(@PathVariable Integer clientId, Model model){
         List<Integer> ids = frontendService.getClientOrderIdsByClientId(clientId);
         model.addAttribute("request", new ManagerCommunicationDto());
@@ -83,11 +85,25 @@ public class PersonAccountController {
         return "manager_request_card";
     }
 
-    @PostMapping("clients/{clientId}/new-manager-request")
+    @PostMapping("/clients/{clientId}/new-manager-request")
     public String getNewManagerRequestPage(@PathVariable Integer clientId,
                                            @ModelAttribute ManagerCommunicationDto managerCommunication){
         frontendService.saveNewManagerCommunication(clientId, managerCommunication);
         return "redirect:/railway-system/clients/%d/manager-requests".formatted(clientId);
+    }
+
+    @GetMapping("/clients/{clientId}/documents")
+    public String getClientDocumentsPage(@PathVariable Integer clientId, Model model){
+        List<DocumentDto> documents = frontendService.getAllClientDocuments(clientId);
+        model.addAttribute("documents", documents);
+        return "documents";
+    }
+
+    @ResponseStatus
+    @PostMapping("/clients/{clientId}/documents/{documentId}/download")
+    public ResponseEntity<byte[]> downloadDocumentById(@PathVariable Integer clientId,
+                                                  @PathVariable Integer documentId){
+        return frontendService.downloadDocument(clientId, documentId);
     }
 
     @ModelAttribute

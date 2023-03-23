@@ -3,6 +3,7 @@ package com.lazarev.frontend.httpclient;
 
 import com.lazarev.model.*;
 import com.lazarev.model.analytics.FlightParametersCalcResponse;
+import com.lazarev.model.documents.DocumentDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public interface PersonalAccountClient {
 
     @PostMapping("/{clientId}/orders")
     Integer saveNewClientOrder(@PathVariable Integer clientId,
-                            @RequestBody ClientOrderCardDto clientOrder);
+                               @RequestBody ClientOrderCardDto clientOrder);
 
     @PutMapping("/{clientId}/orders/{clientOrderId}")
     void updateClientOrderById(@PathVariable Integer clientId,
@@ -51,4 +52,11 @@ public interface PersonalAccountClient {
     @PostMapping("/{clientId}/manager-communications")
     void saveNewManagerCommunication(@PathVariable Integer clientId,
                                      @RequestBody ManagerCommunicationDto managerCommunication);
+
+    @GetMapping("/{clientId}/documents")
+    List<DocumentDto> getAllClientDocuments(@PathVariable Integer clientId);
+
+    @GetMapping("/{clientId}/documents/{documentId}")
+    DocumentDto getDocumentByDocumentId(@PathVariable Integer clientId,
+                                        @PathVariable Integer documentId);
 }
